@@ -96,9 +96,10 @@ namespace ObjectPool
             {
                 throw new Exception("Pool Item prefab is null");
             }
+            
+            // Debug.LogFormat($"Adding new Poolable {item.Name} with id {id}");
 
             var id = item.Name;
-
             // Game object doesn't get created at this point, we need to call pool.Get() to do so
             Pool.Add(
                 id,

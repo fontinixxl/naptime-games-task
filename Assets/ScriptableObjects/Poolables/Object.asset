@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6680851349e4db2a535ccfd98d4f63b, type: 3}
-  m_Name: Shooter
+  m_Name: Object
   m_EditorClassIdentifier: 
-  Name: 
-  Prefab: {fileID: 0}
-  PoolCount: 1
+  Name: Object
+  Prefab: {fileID: 4271430362750100325, guid: a7c3b5c2613bc7e46bb3ba633daf7180, type: 3}
+  PoolCount: 250

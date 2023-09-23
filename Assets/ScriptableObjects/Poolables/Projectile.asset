@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Projectile
   Prefab: {fileID: 4965975042072694867, guid: 07e5cdc9f8c93cf438b9e5200b280365, type: 3}
-  PoolCount: 5
+  PoolCount: 1250
