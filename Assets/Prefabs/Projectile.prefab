@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5088034247585194956}
   - component: {fileID: 7172502767474912518}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  lifeTime: 5
+  lifeTime: 8
 --- !u!1 &7092952071281001964
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 3805522406081515504}
   - component: {fileID: 1372281050770871320}
   - component: {fileID: 1798763157301241170}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RotatedProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,7 +164,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6633672135254063142}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

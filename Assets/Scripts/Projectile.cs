@@ -1,31 +1,30 @@
 ﻿using ObjectPool;
 using UnityEngine;
 
-public class ProjectileMovement : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed = 10f; // Speed at which the projectile moves
     [SerializeField] private float lifeTime = 2f; // Time after which the projectile will be destroyed
 
     private float _activationTime;
-    
+
     private void OnEnable()
     {
-        // Return object to the pool after lifeTime
         _activationTime = Time.time;
     }
-    
-    void Update()
+
+    private void Update()
     {
         if (HasLifeTimeElapsed())
         {
-            DeactivateProjectile();
+            Deactivate();
         }
-        
+
         // Move the projectile in the forward direction
         transform.Translate(Vector3.forward * (speed * Time.deltaTime));
     }
 
-    private void DeactivateProjectile()
+    public void Deactivate()
     {
         if (TryGetComponent<PooledGameObject>(out var pooledGameObject))
         {
