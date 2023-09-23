@@ -1,12 +1,19 @@
 ﻿using ObjectPool;
 using UnityEngine;
 
+[RequireComponent(typeof(PooledGameObject))]
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed = 10f; // Speed at which the projectile moves
     [SerializeField] private float lifeTime = 2f; // Time after which the projectile will be destroyed
 
+    private PooledGameObject _pooledComponent;
     private float _activationTime;
+
+    private void Awake()
+    {
+        _pooledComponent = GetComponent<PooledGameObject>();
+    }
 
     private void OnEnable()
     {
@@ -20,16 +27,13 @@ public class Projectile : MonoBehaviour
             Deactivate();
         }
 
-        // Move the projectile in the forward direction
-        transform.Translate(Vector3.forward * (speed * Time.deltaTime));
+        // Move the 'dummy' parent projectile in the forward directionS
+        transform.parent.Translate(Vector3.forward * (speed * Time.deltaTime));
     }
 
     public void Deactivate()
     {
-        if (TryGetComponent<PooledGameObject>(out var pooledGameObject))
-        {
-            pooledGameObject.OnRelease();
-        }
+        _pooledComponent.OnRelease();
     }
 
     private bool HasLifeTimeElapsed() => Time.time - _activationTime >= lifeTime;

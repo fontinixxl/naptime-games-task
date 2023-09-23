@@ -56,14 +56,12 @@ public class Shooter : MonoBehaviour
         };
     }
 
-    // Wouldn't be necessary to check for the type of collision,
-    // since it has been configured on the collision matrix
     private void OnTriggerEnter(Collider other)
     {
         // If for whatever reason is not a projectile, exit
         if (!other.TryGetComponent(out Projectile projectile)) return;
-
         projectile.Deactivate();
+
         _lives--;
         OnHit?.Invoke(this);
     }
