@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Object
   Prefab: {fileID: 4271430362750100325, guid: a7c3b5c2613bc7e46bb3ba633daf7180, type: 3}
-  PoolCount: 250
+  PoolCount: 50

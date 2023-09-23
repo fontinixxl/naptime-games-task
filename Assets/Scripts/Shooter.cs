@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using ObjectPool;
 using UnityEngine;
 
@@ -10,20 +9,21 @@ public class Shooter : MonoBehaviour
 
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private PoolableItemDefinition projectileItemDef;
+    [SerializeField] private float fireCoolDownTime = 1.0f;
 
     private Material _material;
-    private WaitForSeconds _waitOneSecond;
     private int _lives;
+    private float _elapsedTimeFire; // since last projectile was fired
 
     public int Lives => _lives;
-    public float CoolDownTime { get; set; }
+    public float RespawnElapsedTime { get; set; }
     public Vector2Int GridPosition { get; set; }
 
     private void Awake()
     {
         _material = GetComponent<MeshRenderer>().material;
         _lives = 3;
-        _waitOneSecond = new WaitForSeconds(1.0f);
+        _elapsedTimeFire = fireCoolDownTime * .5f;
     }
 
     private void OnEnable()
@@ -31,18 +31,23 @@ public class Shooter : MonoBehaviour
 #if UNITY_EDITOR
         ApplyColorBasedOnLives();
 #endif
-        StartCoroutine(SpawnProjectiles());
     }
 
-    private IEnumerator SpawnProjectiles()
+    private void Update()
     {
-        while (gameObject.activeSelf)
+        _elapsedTimeFire += Time.deltaTime;
+        if (_elapsedTimeFire >= fireCoolDownTime)
         {
-            var pooledTransform = PoolManager.Instance.Spawn(projectileItemDef.Name).transform;
-            pooledTransform.position = spawnPoint.position;
-            pooledTransform.rotation = transform.rotation;
-            yield return _waitOneSecond;
+            SpawnProjectile();
+            _elapsedTimeFire = 0;
         }
+    }
+
+    private void SpawnProjectile()
+    {
+        var pooledTransform = PoolManager.Instance.Spawn(projectileItemDef.Name).transform;
+        pooledTransform.position = spawnPoint.position;
+        pooledTransform.rotation = transform.rotation;
     }
 
     private void ApplyColorBasedOnLives()
@@ -59,7 +64,12 @@ public class Shooter : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // If for whatever reason is not a projectile, exit
-        if (!other.TryGetComponent(out Projectile projectile)) return;
+        if (!other.TryGetComponent(out Projectile projectile))
+        {
+            Debug.LogWarning("Collider does not have a Projectile Component!", other);
+            return;
+        }
+
         projectile.Deactivate();
 
         _lives--;

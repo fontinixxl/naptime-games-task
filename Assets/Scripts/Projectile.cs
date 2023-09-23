@@ -1,7 +1,6 @@
 ﻿using ObjectPool;
 using UnityEngine;
 
-[RequireComponent(typeof(PooledGameObject))]
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed = 10f; // Speed at which the projectile moves
@@ -10,9 +9,9 @@ public class Projectile : MonoBehaviour
     private PooledGameObject _pooledComponent;
     private float _activationTime;
 
-    private void Awake()
+    private void Start()
     {
-        _pooledComponent = GetComponent<PooledGameObject>();
+        _pooledComponent = GetComponentInParent<PooledGameObject>();
     }
 
     private void OnEnable()

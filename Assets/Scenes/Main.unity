@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolableObjects:
-  - {fileID: 11400000, guid: 20780a3eef0197f43a6e387e59759772, type: 2}
   - {fileID: 11400000, guid: ac1941da12874a3458a1d25e157b0a68, type: 2}
+  - {fileID: 11400000, guid: 20780a3eef0197f43a6e387e59759772, type: 2}
   collectionChecks: 1
   maxPoolSize: 5000
 --- !u!4 &430190563
@@ -310,7 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd3643a722d44ca9bddbae6e5c101d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectCount: 250
   mainCamera: {fileID: 963194227}
   shooterPoolableItem: {fileID: 11400000, guid: ac1941da12874a3458a1d25e157b0a68, type: 2}
   padding: 0.01

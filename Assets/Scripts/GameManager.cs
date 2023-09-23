@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using ObjectPool;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public int objectCount = 50; // TODO: Remove once UI is done
+    // public int objectCount = 50; // TODO: Remove once UI is done
     [SerializeField] private Camera mainCamera;
     [SerializeField] private PoolableItemDefinition shooterPoolableItem;
     [SerializeField] private float padding = 0.2f;
@@ -19,21 +19,20 @@ public class GameManager : MonoBehaviour
     private float _cellWidth;
     private int _rows;
     private int _columns;
+    private int _numObjectSpawn;
 
     private void Start()
     {
-        _objectsAliveCount = objectCount;
         _objectsOnCoolDown = new List<Shooter>();
         PoolManager.Instance.InstantiatePool(); // Allocate memory and create pooled GameObjects
-        CalculateGridSize();
-        InitializeAvailablePositions();
-
-        //TODO: Move to an UI Event once UI is done
-        StartGame();
     }
 
-    private void StartGame()
+    public void StartGame(int numObjectsSpawn)
     {
+        _numObjectSpawn = numObjectsSpawn;
+        _objectsAliveCount = numObjectsSpawn;
+        CalculateGridSize();
+        InitializeAvailablePositions();
         SpawnObjects();
     }
 
@@ -48,8 +47,8 @@ public class GameManager : MonoBehaviour
         for (var i = _objectsOnCoolDown.Count - 1; i >= 0; i--)
         {
             var objectOnCoolDown = _objectsOnCoolDown[i];
-            objectOnCoolDown.CoolDownTime -= Time.deltaTime;
-            if (objectOnCoolDown.CoolDownTime <= 0)
+            objectOnCoolDown.RespawnElapsedTime -= Time.deltaTime;
+            if (objectOnCoolDown.RespawnElapsedTime <= 0)
             {
                 var newPosition = MoveObjectToAvailableRandomPosition(objectOnCoolDown.gameObject);
                 objectOnCoolDown.GridPosition = newPosition;
@@ -61,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnObjects()
     {
-        for (var i = 0; i < objectCount; i++)
+        for (var i = 0; i < _numObjectSpawn; i++)
         {
             var pooledGameObject = PoolManager.Instance.Spawn(shooterPoolableItem.Name).gameObject;
             var position = MoveObjectToAvailableRandomPosition(pooledGameObject);
@@ -81,7 +80,7 @@ public class GameManager : MonoBehaviour
         {
             // Add object's current grid position as a available position
             _availablePositions.Add(hitObject.GridPosition);
-            hitObject.CoolDownTime = 2f;
+            hitObject.RespawnElapsedTime = 2f;
             _objectsOnCoolDown.Add(hitObject);
         }
         else
@@ -130,15 +129,15 @@ public class GameManager : MonoBehaviour
 
         if (aspectRatio >= 1) // Landscape
         {
-            _columns = Mathf.FloorToInt(Mathf.Sqrt(objectCount * aspectRatio));
-            _rows = objectCount / _columns;
-            if (objectCount % _columns > 0) _rows++;
+            _columns = Mathf.FloorToInt(Mathf.Sqrt(_numObjectSpawn * aspectRatio));
+            _rows = _numObjectSpawn / _columns;
+            if (_numObjectSpawn % _columns > 0) _rows++;
         }
         else // Portrait
         {
-            _rows = Mathf.FloorToInt(Mathf.Sqrt(objectCount / aspectRatio));
-            _columns = objectCount / _rows;
-            if (objectCount % _rows > 0) _columns++;
+            _rows = Mathf.FloorToInt(Mathf.Sqrt(_numObjectSpawn / aspectRatio));
+            _columns = _numObjectSpawn / _rows;
+            if (_numObjectSpawn % _rows > 0) _columns++;
         }
 
         _cellWidth = (mainCamera.aspect * mainCamera.orthographicSize * 2 - (_columns - 1) * padding) / _columns;
