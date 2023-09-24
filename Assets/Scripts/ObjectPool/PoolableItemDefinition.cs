@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ObjectPool
+namespace Fontinixxl.NaptimeGames.ObjectPool
 {
     [CreateAssetMenu(fileName = "PoolableItem", menuName = "Pool/Item", order = 0)]
     public class PoolableItemDefinition : ScriptableObject

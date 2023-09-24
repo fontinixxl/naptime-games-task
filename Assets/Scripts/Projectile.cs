@@ -1,39 +1,42 @@
-﻿using ObjectPool;
+﻿using Fontinixxl.NaptimeGames.ObjectPool;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+namespace Fontinixxl.NaptimeGames
 {
-    [SerializeField] private float speed = 10f; // Speed at which the projectile moves
-    [SerializeField] private float lifeTime = 2f; // Time after which the projectile will be destroyed
-
-    private PooledGameObject _pooledComponent;
-    private float _activationTime;
-
-    private void Start()
+    public class Projectile : MonoBehaviour
     {
-        _pooledComponent = GetComponentInParent<PooledGameObject>();
-    }
+        [SerializeField] private float speed = 10f; // Speed at which the projectile moves
+        [SerializeField] private float lifeTime = 2f; // Time after which the projectile will be destroyed
 
-    private void OnEnable()
-    {
-        _activationTime = Time.time;
-    }
+        private PooledGameObject _pooledComponent;
+        private float _activationTime;
 
-    private void Update()
-    {
-        if (HasLifeTimeElapsed())
+        private void Start()
         {
-            Deactivate();
+            _pooledComponent = GetComponentInParent<PooledGameObject>();
         }
 
-        // Move the 'dummy' parent projectile in the forward directionS
-        transform.parent.Translate(Vector3.forward * (speed * Time.deltaTime));
-    }
+        private void OnEnable()
+        {
+            _activationTime = Time.time;
+        }
 
-    public void Deactivate()
-    {
-        _pooledComponent.OnRelease();
-    }
+        private void Update()
+        {
+            if (HasLifeTimeElapsed())
+            {
+                Deactivate();
+            }
 
-    private bool HasLifeTimeElapsed() => Time.time - _activationTime >= lifeTime;
+            // Move the 'dummy' parent projectile in the forward directionS
+            transform.parent.Translate(Vector3.forward * (speed * Time.deltaTime));
+        }
+
+        public void Deactivate()
+        {
+            _pooledComponent.OnRelease();
+        }
+
+        private bool HasLifeTimeElapsed() => Time.time - _activationTime >= lifeTime;
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace Fontinixxl.NaptimeGames.UI
 {
     public class UIManager : MonoBehaviour
     {

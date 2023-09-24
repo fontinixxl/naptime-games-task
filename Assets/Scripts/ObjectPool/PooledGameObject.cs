@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ObjectPool
+namespace Fontinixxl.NaptimeGames.ObjectPool
 {
     /// <summary>
     /// Component that will be automatically added to any GO that is Poolable

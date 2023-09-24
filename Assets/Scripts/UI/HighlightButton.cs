@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI
+namespace Fontinixxl.NaptimeGames.UI
 {
     public class HighlightButton : MonoBehaviour, ISelectable, IPointerEnterHandler, IPointerExitHandler
     {
@@ -37,20 +37,16 @@ namespace UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (!_isSelected)
-            {
-                buttonImage.sprite = highlightedSprite;
-                transform.localScale = highlightedScale;
-            }
+            if (_isSelected) return;
+            buttonImage.sprite = highlightedSprite;
+            transform.localScale = highlightedScale;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (!_isSelected)
-            {
-                buttonImage.sprite = normalSprite;
-                transform.localScale = _normalScale;
-            }
+            if (_isSelected) return;
+            buttonImage.sprite = normalSprite;
+            transform.localScale = _normalScale;
         }
 
         public void SetSelected(bool isSelected)

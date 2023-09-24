@@ -1,4 +1,4 @@
-﻿namespace UI
+﻿namespace Fontinixxl.NaptimeGames.UI
 {
     public interface ISelectable
     {

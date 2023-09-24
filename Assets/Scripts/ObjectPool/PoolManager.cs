@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Fontinixxl.NaptimeGames.Utils;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace ObjectPool
+namespace Fontinixxl.NaptimeGames.ObjectPool
 {
     public class PoolManager : Singleton<PoolManager>
     {
