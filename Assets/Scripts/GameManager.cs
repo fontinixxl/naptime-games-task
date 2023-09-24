@@ -1,20 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using ObjectPool;
 using Random = UnityEngine.Random;
 
+[DefaultExecutionOrder(-1)]
 public class GameManager : Singleton<GameManager>
 {
-    // public int objectCount = 50; // TODO: Remove once UI is done
+    public event Action OnGameOver;
+    
     [SerializeField] private Camera mainCamera;
     [SerializeField] private PoolableItemDefinition shooterPoolableItem;
     [SerializeField] private float padding = 0.2f;
 
-    private List<Vector2Int> _availablePositions = new();
-
     // Stores all the objects that have been hit and need to be respawn after 2 seconds
     private List<Shooter> _objectsOnCoolDown;
+    private readonly List<Vector2Int> _availablePositions = new();
     private int _objectsAliveCount;
+    // Grid data
     private float _cellHeight;
     private float _cellWidth;
     private int _rows;
@@ -24,16 +27,23 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         _objectsOnCoolDown = new List<Shooter>();
-        PoolManager.Instance.InstantiatePool(); // Allocate memory and create pooled GameObjects
     }
 
     public void StartGame(int numObjectsSpawn)
     {
+        PoolManager.Instance.InstantiatePool(); // Allocate memory and create pooled GameObjects
         _numObjectSpawn = numObjectsSpawn;
         _objectsAliveCount = numObjectsSpawn;
         CalculateGridSize();
         InitializeAvailablePositions();
         SpawnObjects();
+    }
+
+    private void GameOver()
+    {
+        OnGameOver?.Invoke();
+        _objectsOnCoolDown.Clear();
+        PoolManager.Instance.CleanupPool();
     }
 
     private void Update()
@@ -85,12 +95,11 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            // It's dead! lol 
+            // It's dead! lol
             _objectsAliveCount--;
-            if (_objectsAliveCount == 1)
+            if (_objectsAliveCount <= Mathf.CeilToInt(_numObjectSpawn * 0.1f))
             {
-                // TODO: Trigger Game Over actions
-                Debug.Log("Game Over!");
+                GameOver();
             }
         }
     }

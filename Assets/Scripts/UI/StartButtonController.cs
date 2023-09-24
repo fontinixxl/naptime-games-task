@@ -6,7 +6,7 @@ public class StartButtonController : MonoBehaviour
 {
     [SerializeField] private Button startButton;
 
-    private void Start()
+    private void OnEnable()
     {
         startButton.interactable = false;
     }
