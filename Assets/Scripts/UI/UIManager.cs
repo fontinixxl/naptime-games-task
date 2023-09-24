@@ -5,26 +5,36 @@ namespace UI
 {
     public class UIManager : MonoBehaviour
     {
+        [SerializeField] private UIMainMenuController mainMenuController;
+        [SerializeField] private StartButtonController startButtonController;
+
+        [Header("UI References")] 
         [SerializeField] private GameObject mainMenuPanel;
         [SerializeField] private GameObject gameOverPanel;
-        [SerializeField] private Button startButton;
-        
+
         private int _objectsSelected;
+        private Button _startButton;
 
         private void Awake()
         {
             _objectsSelected = 0;
+            _startButton = startButtonController.GetComponent<Button>();
         }
 
         private void OnEnable()
         {
+            _startButton.onClick.AddListener(OnStartButtonClicked);
+            mainMenuController.OnOptionSelected += SetSelectedObjects;
             GameManager.Instance.OnGameOver += ShowGameOverUI;
         }
+
         private void OnDisable()
         {
+            _startButton.onClick.RemoveListener(OnStartButtonClicked);
+            mainMenuController.OnOptionSelected -= SetSelectedObjects;
             GameManager.Instance.OnGameOver -= ShowGameOverUI;
         }
-        
+
         private void Start()
         {
             ShowGameUI();
@@ -50,10 +60,10 @@ namespace UI
 
         #region Unity OnClick Event Handlers
 
-        public void SetSelectedObjects(int selectedObjects)
+        private void SetSelectedObjects(int selectedObjects)
         {
             _objectsSelected = selectedObjects;
-            startButton.interactable = true;
+            startButtonController.SetButtonSate(true);
         }
 
         public void OnStartButtonClicked()
@@ -63,12 +73,12 @@ namespace UI
                 Debug.LogError("Start game has been pressed without selecting an option!");
                 return;
             }
-            
+
             GameManager.Instance.StartGame(_objectsSelected);
             HideAllUIPanels();
-            startButton.interactable = false;
+            startButtonController.SetButtonSate(true);
         }
-        
+
         #endregion
     }
 }
